@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="jquery.1.8.3.min.js"></script>
+    <script src="script.js"></script>
+    <script src="jquery.simpleWeather.js"></script>
     <meta charset="UTF-8">
     <title> Start </title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="jquery.1.8.3.min.js"></script>
-    <script src="background.js"></script>
 </head>
 <body>
 
     <div class="content-container">
         <div class="left-container">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            <div id="weather"></div>
         </div>
         <div class="center-container">
             <div class="greeting-box">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </div>
             <div class="search-box">
+                <div class="current-conditions-box">
+
+                </div>
                 <form method="get" action="https://duckduckgo.com/">
-                    <input type="text" size="100" name="q" placeholder="Search...       ">
+                    <input type="text" name="q" placeholder="Search...       ">
                 </form>
             </div>
             <div class="quote-box">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                <blockquote id="qod-quote">
+                    ... loading ...
+                </blockquote>
+                <script src="http://quotesondesign.com/api/3.0/api-3.0.js"
+                        type="text/javascript" charset="utf-8"></script>
             </div>
 
         </div>
@@ -31,8 +38,5 @@
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
     </div>
-
-
-<script src="functions.js"></script>
 </body>
 </html>
