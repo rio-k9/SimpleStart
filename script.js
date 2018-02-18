@@ -1,7 +1,8 @@
 $(function(){
-  navigator.geolocation.getCurrentPosition(function(position) {
-    loadWeather(position.coords.latitude, position.coords.longitude); //load weather using your lat/lng coordinates
-  });
+  /* VARIABLES
+  ------------------------------------------------------------------------
+   */
+
   var dir = "background/";
   var file_extension = ".jpeg";
   var date = new Date();
@@ -14,6 +15,7 @@ $(function(){
   var flurries_array = [13, 14, 15, 16, 17, 41, 42, , 46]
   var sunny_array = [32, 34, 36]
   var rainy_array = [5, 6, 7, 8, 9, 10, 11, 12, 18, 40]
+  var image_of_the_day = dir + daylight_check(time) + day.toString() + file_extension;
   // var sun_shower_msg = ["wear a jacket.", "it could rain."]
   // var thunder_msg = ["don't stand under a tree.", "watch out for lightning!"]
   // var cloudy_msg = ["it could rain.", "wear a coat."]
@@ -61,35 +63,71 @@ $(function(){
     "  <div class=\"rain\"></div>\n" +
     "</div>"
 
-  function generateGreeting(name, currentWeather, currentMessage){
-    var image_of_the_day = dir + daylight_check(time) + day.toString() + file_extension;
+  /* VARIABLES
+  ------------------------------------------------------------------------
+   */
+
+  /*INITIALISE */
+  __init()
+  function __init(){
+    setTimeout(function(){
+      $("html").css({"opacity" : "1"}).hide().fadeIn(2000)
+    }, 800);
     console.log(image_of_the_day);
-    $("body").css({"background-image" : "url(" + image_of_the_day + ")"});
+    $("body").css({"background-image" : "url(" + image_of_the_day + ")"})
+    generateGreeting("Rio.");
+    navigator.geolocation.getCurrentPosition(function(position) {
+      loadWeather(position.coords.latitude, position.coords.longitude); //load weather using your lat/lng coordinates
+    });
+  }
+  /*INITIALISE */
+
+
+
+  /*Generate Personal Greeting
+  ------------------------------------------------------------------------
+   */
+  function generateGreeting(name){
     var morning_greeting = "<div><h1>Good Morning " + name + "</h1></div>";
     var evening_greeting = "<div><h1>Good Evening "+ name + "</h1></div>";
     var afternoon_greeting = "<div><h1>Good Afternoon " + name + "</h1></div>";
-    $(".current-conditions-box").html("Today the weather is <i>" + currentWeather + "</i>.");
     console.log(time);
-    if(time >= 12 && time <= 16) $(".greeting-box").html(afternoon_greeting);
 
-    else if(time >= 17 || time <= 4) $(".greeting-box").html(evening_greeting);
+    if(time >= 12 && time <= 16) $(".greeting-box").html(afternoon_greeting).hide().fadeIn(1000);
 
-    else if (time >= 5 && time <= 11) $(".greeting-box").html(morning_greeting);
+    else if(time >= 17 || time <= 4) $(".greeting-box").html(evening_greeting).hide().fadeIn(1000);
 
-    else $(".greeting-box").html("Hello " + NAME);
+    else if (time >= 5 && time <= 11) $(".greeting-box").html(morning_greeting).hide().fadeIn(1000)
+
+    else $(".greeting-box").html("Hello " + NAME).hide().fadeIn(1000);
+    $(".quote-box").hide().fadeIn(3000);
   }
 
   function daylight_check(current_time){
-    if (current_time >= 5 && current_time <=18){
+    if (current_time >= 5 && current_time <=16){
       return "day/";
     }
     else{
       return "night/";
     }
   }
+  /*Generate Personal Greeting
+------------------------------------------------------------------------
+ */
 
-  function randomArrayMsg(ar) {
-    return ar[Math.floor(Math.random() * ar.length)]
+
+
+  /* GENERATE THE WEATHER CONTENT
+  ---------------------------------------------------
+
+   */
+  //
+  // function randomArrayMsg(ar) {
+  //   return ar[Math.floor(Math.random() * ar.length)]
+  // }
+
+  function generateWeatherGreet(currentWeather){
+    $(".current-conditions-box").html("Today the weather forecast is <i>" + currentWeather + "</i>.").hide().fadeIn(700);
   }
 
   function loadWeather(latitude, longitude){
@@ -100,6 +138,7 @@ $(function(){
       success: function(weather) {
         var sendMsg;
         var weatherHTML;
+        console.log(weather.code)
         switch (weather.code) {
           case jQuery.inArray(sun_shower_array) != -1:
             weatherHTML = sun_shower;
@@ -121,19 +160,20 @@ $(function(){
             break;
           default:           weatherHTML = cloudy;
         }
-        //
-        // var current_city = weather.city;
-        // var current_temp = weather.temp;
         // var wind_direction = wind.direction;
         // var wind_speed = wind.speed
         html = '<div class="icon_box">' + weatherHTML + '</div>';
-        html += '<div class="city_box">' + weather.city+', '+weather.region + '</div> <br>'+  weather.temp + '&deg;' + weather.units.temp;
-        $("#weather").html(html);
-        generateGreeting("Rio", weather.text.toLowerCase());
+        html += '<div class="city_box">' + weather.city+', '+weather.region + '</div> <div class="temp_box">' + weather.temp + '&deg;' + weather.units.temp + '</div>';
+        $("#weather").html(html).hide().fadeIn(700);
+        generateWeatherGreet(weather.text.toLowerCase())
       },
       error: function(error) {
         $("#weather").html('<p>'+error+'</p>');
       }
     })
   }
+
+  /* GENERATE THE WEATHER CONTENT
+---------------------------------------------------
+ */
 })
